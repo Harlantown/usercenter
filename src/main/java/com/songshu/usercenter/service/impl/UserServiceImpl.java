@@ -93,9 +93,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         password = password + SALT;
         String finalPassword = StringUtil.md5(password);
 
-        QueryWrapper<User> queryWrapper = new QueryWrapper();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", account);
-        queryWrapper.eq("userPassword", password);
+        queryWrapper.eq("userPassword", finalPassword);
 
         User user = userMapper.selectOne(queryWrapper);
         // 用户不存在
@@ -123,10 +123,65 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     }
 
+    public User userLogin(String account, String password) {
+        if (StringUtils.isAnyBlank(account, password)) {
+            return null;
+        }
+        if (account.length() < 4) {
+            return null;
+        }
+        if (password.length() < 8) {
+            return null;
+        }
+
+        password = password + SALT;
+        String finalPassword = StringUtil.md5(password);
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", account);
+        queryWrapper.eq("userPassword", finalPassword);
+
+        User user = userMapper.selectOne(queryWrapper);
+        // 用户不存在
+        if (user == null) {
+            log.info("User login failed!!!");
+            return null;
+        }
+
+        User safeUser = new User();
+        safeUser.setId(user.getId());
+        safeUser.setUsername(user.getUsername());
+        safeUser.setUserAccount(user.getUserAccount());
+        safeUser.setAvatarUrl(user.getAvatarUrl());
+        safeUser.setGender(user.getGender());
+        safeUser.setPhone(user.getPhone());
+        safeUser.setEmail(user.getEmail());
+        safeUser.setUserStatus(user.getUserStatus());
+        safeUser.setCreatTime(user.getCreatTime());
+        safeUser.setUserPermission(user.getUserPermission());
+
+//        request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, safeUser);
+
+        return safeUser;
+
+
+    }
+
     @Override
     public User getSafeUser(User user) {
+
+        if(user == null){
+            return null;
+        }
         user.setUserPassword(null);
         return user;
+    }
+
+    @Override
+    public Integer userLogout(HttpServletRequest request) {
+
+        request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
+        return 1;
     }
 }
 

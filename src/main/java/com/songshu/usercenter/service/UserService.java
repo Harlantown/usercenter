@@ -28,6 +28,7 @@ public interface UserService extends IService<User> {
      * @return
      */
     User userLogin(String account, String password, HttpServletRequest request);
+//    User userLogin(String account, String password);
 
     /**
      * 用户脱敏
@@ -35,5 +36,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getSafeUser(User user);
+
+    /**
+     * 用户注销
+     * @param request
+     * @return
+     */
+    Integer userLogout(HttpServletRequest request);
 
 }

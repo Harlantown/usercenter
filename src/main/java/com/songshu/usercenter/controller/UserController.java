@@ -7,6 +7,7 @@ import com.songshu.usercenter.model.request.UserRegisterRequest;
 import com.songshu.usercenter.service.UserService;
 import com.songshu.usercenter.utils.constant.UserConstant;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * @Description
  * @create 2022-05-05 下午 10:57
  */
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,10 +29,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Long userRegister(@RequestBody String userAccount,
-                             @RequestBody String userPassword,
-                             @RequestBody String userCheckPassword){
+    public Long userRegister(@RequestBody UserRegisterRequest registerRequest){
 
+        String userAccount = registerRequest.getUserAccount();
+        String userPassword = registerRequest.getUserPassword();
+        String userCheckPassword = registerRequest.getUserCheckPassword();
+        if(StringUtils.isAnyBlank(userAccount, userPassword, userCheckPassword)){
+            return null;
+        }
         return userService.userRegistry(userAccount,
                 userPassword,
                 userCheckPassword);
@@ -38,16 +44,35 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User userLogin(@RequestBody String userAccount,
-                          @RequestBody String userPassword,
+    public User userLogin(@RequestBody UserLoginRequest loginRequest,
                           HttpServletRequest request){
+        String userAccount = loginRequest.getUserAccount();
+        String userPassword = loginRequest.getUserPassword();
+        if(StringUtils.isAnyBlank(userAccount, userPassword)){
+            return null;
+        }
+        User user = userService.userLogin(userAccount, userPassword, request);
 
-        User user = userService.userLogin(userAccount,
-                userPassword, request);
         User safeUser = userService.getSafeUser(user);
         return safeUser;
 
     }
+
+    @GetMapping("/current")
+    public User getCurrentUser(HttpServletRequest request){
+        Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
+        User curUser = (User) userObj;
+
+        if(curUser == null){
+            return null;
+        }
+
+        Long id = curUser.getId();
+        User user = userService.getById(id);
+        User safeUser = userService.getSafeUser(user);
+        return safeUser;
+    }
+
 
     @GetMapping("/search")
     public List<User> serachUsersInfo(String userName, HttpServletRequest request){
@@ -60,8 +85,8 @@ public class UserController {
             queryWrapper.like("userName",userName);
         }
         List<User> list = userService.list(queryWrapper);
-        return list;
-//        return list.stream().map(user -> userService.getSafeUser(user)).collect(Collectors.toList());
+//        return list;
+        return list.stream().map(user -> userService.getSafeUser(user)).collect(Collectors.toList());
 
     }
 
@@ -92,5 +117,16 @@ public class UserController {
         }
 
         return true;
+    }
+
+    @PostMapping("/logout")
+    public Integer logoutUser(HttpServletRequest request){
+
+        if(request == null){
+            return 0;
+        }
+        userService.userLogout(request);
+        return 1;
+
     }
 }

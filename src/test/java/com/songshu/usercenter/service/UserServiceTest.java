@@ -51,4 +51,12 @@ public class UserServiceTest {
         long dogYupi = userService.userRegistry("dogYupi", "12345678", "12345678");
         System.out.println(dogYupi);
     }
+
+    @Test
+    public void logTest(){
+
+//        User user = new User();
+//        User dogYupi = userService.userLogin("dogYupi", "12345678");
+//        System.out.println(dogYupi);
+    }
 }
