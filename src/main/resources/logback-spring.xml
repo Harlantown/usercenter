@@ -20,5 +20,7 @@
 
     <!--  根据特殊需求指定局部日志级别 -->
     <logger name="com.songshu.usercenter.mapper" level="DEBUG"/>
+    <logger name="com.songshu.usercenter.controller" level="DEBUG"/>
+    <logger name="com.songshu.usercenter.config" level="DEBUG"/>
 
 </configuration>

@@ -1,5 +1,4 @@
 package com.songshu.usercenter.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,8 +8,8 @@ import com.songshu.usercenter.service.UserService;
 import java.util.Objects;
 
 import com.songshu.usercenter.mapper.UserMapper;
-import com.songshu.usercenter.utils.constant.UserConstant;
-import com.songshu.usercenter.utils.tools.StringUtil;
+import com.songshu.usercenter.common.constant.StringConstant;
+import com.songshu.usercenter.common.utils.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -113,10 +112,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safeUser.setPhone(user.getPhone());
         safeUser.setEmail(user.getEmail());
         safeUser.setUserStatus(user.getUserStatus());
-        safeUser.setCreatTime(user.getCreatTime());
+        safeUser.setCreateTime(user.getCreateTime());
         safeUser.setUserPermission(user.getUserPermission());
 
-        request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, safeUser);
+        request.getSession().setAttribute(StringConstant.USER_LOGIN_STATE, safeUser);
 
         return safeUser;
 
@@ -157,7 +156,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safeUser.setPhone(user.getPhone());
         safeUser.setEmail(user.getEmail());
         safeUser.setUserStatus(user.getUserStatus());
-        safeUser.setCreatTime(user.getCreatTime());
+        safeUser.setCreateTime(user.getCreateTime());
         safeUser.setUserPermission(user.getUserPermission());
 
 //        request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, safeUser);
@@ -180,7 +179,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Integer userLogout(HttpServletRequest request) {
 
-        request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
+        request.getSession().removeAttribute(StringConstant.USER_LOGIN_STATE);
         return 1;
     }
 }

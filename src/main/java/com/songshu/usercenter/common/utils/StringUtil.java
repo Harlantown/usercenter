@@ -1,4 +1,4 @@
-package com.songshu.usercenter.utils.tools;
+package com.songshu.usercenter.common.utils;
 
 import org.junit.Test;
 
@@ -6,8 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
 
 /**
  * @author Charmot

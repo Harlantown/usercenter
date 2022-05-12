@@ -62,7 +62,7 @@ public class User implements Serializable {
     /**
      * 
      */
-    private Date creatTime;
+    private Date createTime;
 
     /**
      * 
@@ -157,12 +157,12 @@ public class User implements Serializable {
         this.userStatus = userStatus;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getUpdateTime() {
@@ -205,7 +205,7 @@ public class User implements Serializable {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", userStatus=" + userStatus +
-                ", creatTime=" + creatTime +
+                ", creatTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", isDelete=" + isDelete +
                 ", userPermission=" + userPermission +
